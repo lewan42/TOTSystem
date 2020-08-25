@@ -1,0 +1,39 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="FieldCanBeLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="EXCLUDE_ANNOS">
+        <value>
+          <list size="2">
+            <item index="0" class="java.lang.String" itemvalue="javax.xml.bind.annotation.XmlElement" />
+            <item index="1" class="java.lang.String" itemvalue="javax.xml.bind.annotation.XmlElementRef" />
+          </list>
+        </value>
+      </option>
+      <option name="IGNORE_FIELDS_USED_IN_MULTIPLE_METHODS" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="14">
+            <item index="0" class="java.lang.String" itemvalue="ng-click" />
+            <item index="1" class="java.lang.String" itemvalue="ng-controller" />
+            <item index="2" class="java.lang.String" itemvalue="ng-show" />
+            <item index="3" class="java.lang.String" itemvalue="ng-class" />
+            <item index="4" class="java.lang.String" itemvalue="ng-repeat" />
+            <item index="5" class="java.lang.String" itemvalue="ng-if" />
+            <item index="6" class="java.lang.String" itemvalue="ng-model" />
+            <item index="7" class="java.lang.String" itemvalue="ng-bind-html-unsafe" />
+            <item index="8" class="java.lang.String" itemvalue="datepicker" />
+            <item index="9" class="java.lang.String" itemvalue="ng-value" />
+            <item index="10" class="java.lang.String" itemvalue="sortable" />
+            <item index="11" class="java.lang.String" itemvalue="filter" />
+            <item index="12" class="java.lang.String" itemvalue="ng-attr-id" />
+            <item index="13" class="java.lang.String" itemvalue="ng-selected" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+  </profile>
+</component>

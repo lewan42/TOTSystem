@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <meta charset="utf-8"/>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+    <script src="/js/MainApp.js"></script>
+    <script src="/js/UploadFileCtrl.js"></script>
+    <script src="/js/GetFilesCtrl.js"></script>
+    <script src="/js/tableInfoSec.js"></script>
+    <script src="/js/TableTradeHistory.js"></script>
+    <script src="/js/MergeTable.js"></script>
+
+    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+
+</head>
+<body ng-app="MainApp">
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#import">Импорт объектов</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#info_securities">Информация о ценных бумагах</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#trading_history">История торгов</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#merge_table">Merge table</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+    <!--    IMPORT -->
+    <div style="margin: 10px" class="tab-pane fade show active" id="import">
+        <div ng-controller="UploadFileController">
+            <form>
+                Загрузка файла: <input type="file" file-model="myForm.files[0]"/><br/>
+                <button type="button" ng-click="doUploadFile()">Загрузить</button>
+            </form>
+        </div>
+    </div>
+
+    <!--    SECURITIES -->
+    <div class="tab-pane fade" id="info_securities">
+        <div ng-controller="ViewTables">
+            <div ng-show="edit_info_secure">
+                <table class="friends table table-bordered">
+
+                    <tr>
+                        <th ng-repeat="header in headers">{{header}}</th>
+                    </tr>
+
+                    <tr>
+                        <td ng-repeat="ctn in content">
+                            <label ng-if="headers[$index] == 'id' || headers[$index] == 'secid'">{{ctn}}</label>
+
+                            <input id="{{'edit_secure_input_'+headers[$index]}}"
+                                   ng-if="headers[$index] != 'id' && headers[$index] != 'secid'"
+                                   type="text"
+                                   value="{{ctn}}"/>
+                        </td>
+                    </tr>
+                </table>
+                <button class="btn-primary" ng-click="save(content)">Сохранить</button>
+            </div>
+
+            <div ng-show="create_info_secure">
+                <table class="friends table table-bordered">
+
+                    <tr>
+                        <th ng-if="headers[$index] != 'id'" ng-repeat="header in headers">{{header}}</th>
+                    </tr>
+
+                    <tr>
+                        <td ng-if="headers[$index] != 'id'" ng-repeat="header in headers">
+                            <input id="{{'create_secure_input_'+headers[$index]}}" type="text"/>
+                        </td>
+                    </tr>
+                </table>
+                <button class="btn-primary" ng-click="create()">Создать</button>
+            </div>
+
+            <hr/>
+            <button class="btn-primary" ng-click="openDivCreate()">Добавить</button>
+            <hr/>
+            <table class="friends table table-bordered">
+                <tr>
+                    <th>Edit</th>
+                    <th>Delete</th>
+
+                    <th ng-repeat="header in headers">
+
+                        <!--                        <button ng-click="sortBy('header')">{{header}}</button>-->
+                        <button ng-click="toggleSort($index)">{{header}}</button>
+                    </th>
+                </tr>
+
+                <tr ng-repeat="content in data_content | orderBy:sortColumn:reverse">
+                    <td>
+                        <button ng-click="edit(content)">edit</button>
+                    </td>
+                    <td>
+                        <button ng-click="delete(content)">delete</button>
+                    </td>
+                    <td ng-repeat="ctn in content" ng-bind-html-unsafe="content[headers[$index]]">
+                        {{ctn}}
+                    </td>
+                    <td>
+                        <button ng-click="edit(content)">edit</button>
+                    </td>
+                    <td>
+                        <button ng-click="delete(content)">delete</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!--    TRADING HISTORY -->
+    <div class="tab-pane fade" id="trading_history">
+        <div ng-controller="TableTradeHistory">
+
+            <!--    TRADING HISTORY   EDIT  -->
+            <div ng-show="edit_trading">
+                <table class="friends table table-bordered">
+
+                    <tr>
+                        <th ng-repeat="header in headers_trading">{{header}}</th>
+                    </tr>
+
+                    <tr>
+                        <td ng-repeat="ctn in content">
+
+                            <label ng-if="headers_trading[$index] == 'id'">{{ctn}}</label>
+
+                            <input id="{{'edit_th_input_text_'+headers_trading[$index]}}"
+                                   ng-if="headers_trading[$index] != 'id'
+                                   && headers_trading[$index] != 'secid'
+                                   && headers_trading[$index] != 'tradedate'"
+                                   type="text"
+                                   value="{{ctn}}"/>
+
+
+                            <select id="{{'edit_th_select_'+headers_trading[$index]}}"
+                                    name="secid"
+                                    ng-if="headers_trading[$index] == 'secid'">
+                                <option ng-selected="secid == ctn" ng-repeat="secid in content_secid" value="{{secid}}">
+                                    {{secid}}
+                                </option>
+                            </select>
+
+                            <input id="{{'edit_th_input_data_'+headers_trading[$index]}}"
+                                   type="date"
+                                   ng-if="headers_trading[$index] == 'tradedate'"
+                                   name="input"
+                                   ng-model="datepicker" required/>
+
+                        </td>
+                    </tr>
+                </table>
+                <button class="btn-primary" ng-click="save(content)">Сохранить</button>
+            </div>
+
+            <!--    TRADING HISTORY   CREATE  -->
+            <div ng-show="create_trading">
+                <table class="friends table table-bordered">
+
+                    <tr>
+                        <th ng-if="headers_trading[$index] != 'id'" ng-repeat="header in headers_trading">{{header}}
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <td ng-if="headers_trading[$index] != 'id'" ng-repeat="header in headers_trading">
+
+                            <input id="{{'create_th_input_text_'+headers_trading[$index]}}"
+                                   ng-if="headers_trading[$index] != 'id'
+                                   && headers_trading[$index] != 'secid'
+                                   && headers_trading[$index] != 'tradedate'"
+                                   type="text"/>
+
+
+                            <select id="{{'create_th_select_'+headers_trading[$index]}}"
+                                    name="secid"
+                                    ng-if="headers_trading[$index] == 'secid'">
+                                <option ng-selected="secid == ctn" ng-repeat="secid in content_secid">
+                                    {{secid}}
+                                </option>
+                            </select>
+
+                            <input id="{{'create_th_input_data_'+headers_trading[$index]}}"
+                                   type="date"
+                                   ng-if="headers_trading[$index] == 'tradedate'"
+                                   name="input" required/>
+                        </td>
+
+
+                    </tr>
+                </table>
+                <button class="btn-primary" ng-click="create()">Создать</button>
+            </div>
+
+            <hr/>
+            <button class="btn-primary" ng-click="openDivCreate()">Добавить</button>
+            <hr/>
+
+            <!-- Table Trading history -->
+            <table class="friends table table-bordered">
+                <tr>
+                    <th>Edit</th>
+                    <th>Delete</th>
+
+                    <th ng-repeat="header in headers_trading">
+                        <button ng-click="toggleSort($index)">{{header}}</button>
+                    </th>
+                </tr>
+
+                <tr ng-repeat="content in data_content_trading | orderBy:sortColumn:reverse">
+                    <td>
+                        <button ng-click="edit(content)">edit</button>
+                    </td>
+                    <td>
+                        <button ng-click="delete(content)">delete</button>
+                    </td>
+                    <td ng-repeat="ctn in content"
+                        ng-bind-html-unsafe="content[headers_trading[$index]]">
+                        {{ctn}}
+                    </td>
+
+                    <td>
+                        <button ng-click="edit(content)">edit</button>
+                    </td>
+                    <td>
+                        <button ng-click="delete(content)">delete</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!--   MERGE TABLE  -->
+    <div class="tab-pane fade" id="merge_table">
+        <div ng-controller="MergeTable">
+
+            <div style="margin: 10px">
+                <label> Фильтр по полю emitent_title:
+                    <input type="text" ng-model="filter_emitent_title.emitent_title">
+                </label>
+                <div>
+                    Фильтр по полю tradedate с :
+                    <input type="date" name="input" ng-model="datepicker_filter_start" required/>
+                </div>
+
+                <div>
+                    Фильтр по полю tradedate до:
+                    <input type="date" name="input" ng-model="datepicker_filter_end" required/>
+                </div>
+            </div>
+
+            <table class="friends table table-bordered">
+                <tr>
+                    <th ng-repeat="header in headers_merge_table">
+                        <button ng-click="toggleSort($index)">{{header}}</button>
+                    </th>
+                </tr>
+
+                <tr ng-repeat="content in data_content_merge_table | orderBy:sortColumn:reverse | filter:filter_emitent_title | dateRange:datepicker_filter_start:datepicker_filter_end">
+
+                    <td ng-repeat="ctn in content" ng-bind-html-unsafe="content[headers_trading[$index]]">
+                        {{ctn}}
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
